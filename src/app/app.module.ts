@@ -6,12 +6,16 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
+import { ClientService } from './services/client.service';
+import { FlashMessagesModule } from 'angular2-flash-messages';
 
 
 const appRoutes: Routes = [
   { path: '', component: DashboardComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'add-client', component: AddClientComponent },
+  { path: 'client/:id', component: ClientDetailsComponent}
 ]
 
 
@@ -50,8 +54,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase, 'client-panel'),
     AngularFireAuthModule,
+    FlashMessagesModule
   ],
-  providers: [AngularFireDatabase, AngularFireDatabaseModule],
+  providers: [AngularFireDatabase, AngularFireDatabaseModule, ClientService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
