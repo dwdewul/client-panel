@@ -7,16 +7,22 @@ import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/dat
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 import { ClientService } from './services/client.service';
+import { AuthService } from './services/auth.service';
+import { SettingsService } from './services/settings.service';
 import { FlashMessagesModule } from 'angular2-flash-messages';
+import { AuthGuard } from './guards/auth.guards';
+import { RegisterGuard } from './guards/register.guard';
 
 
 const appRoutes: Routes = [
-  { path: '', component: DashboardComponent },
-  { path: 'register', component: RegisterComponent },
+  { path: '', component: DashboardComponent, canActivate:[AuthGuard] },
+  { path: 'register', component: RegisterComponent, canActivate:[RegisterGuard] },
   { path: 'login', component: LoginComponent },
-  { path: 'add-client', component: AddClientComponent },
-  { path: 'client/:id', component: ClientDetailsComponent},
-  { path: 'edit-client/:id', component: EditClientComponent},
+  { path: 'add-client', component: AddClientComponent, canActivate:[AuthGuard] },
+  { path: 'client/:id', component: ClientDetailsComponent, canActivate:[AuthGuard]},
+  { path: 'edit-client/:id', component: EditClientComponent, canActivate:[AuthGuard]},
+  { path: 'settings', component: SettingsComponent},
+  { path: '**', component: PageNotFoundComponent}
 ]
 
 
@@ -57,7 +63,15 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     AngularFireAuthModule,
     FlashMessagesModule
   ],
-  providers: [AngularFireDatabase, AngularFireDatabaseModule, ClientService],
+  providers: [
+    AngularFireDatabase, 
+    AngularFireDatabaseModule, 
+    ClientService, 
+    AuthService, 
+    AuthGuard,
+    SettingsService,
+    RegisterGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
